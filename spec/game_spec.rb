@@ -27,4 +27,12 @@ describe Game do
     expect(g.rankings.where(rank: 1).first.name).to eq "hoge"
     expect(g.rankings.where(rank: 2).first.name).to eq "fuga"
   end
+
+  it "should scrape" do
+    stub_request(:get, "http://typing.twi1.me/game/39679").
+      to_return(:body => File.open("spec/game.html").read)
+    g = Game.scrape(39679)
+    expect(g.mytyping_id).to eq 39679
+    expect(g.name).to eq "親指シフト練習２ーホームポジションの練習"
+  end
 end

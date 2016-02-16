@@ -9,8 +9,8 @@ describe Mytyping do
       stub_request(:get, "http://typing.twi1.me/game/39679").
         to_return(:body => File.open("spec/game.html").read)
       mt = Mytyping.new
-      ret = mt.scrape_game("39679")
-      expect(ret).to eq({name: '親指シフト練習２ーホームポジションの練習', mytyping_id: "39679"})
+      ret = mt.scrape_game(39679)
+      expect(ret).to eq({name: '親指シフト練習２ーホームポジションの練習', mytyping_id: 39679})
     end
   end
 
@@ -19,7 +19,7 @@ describe Mytyping do
       stub_request(:get, "http://typing.twi1.me/ranking?gameId=39679").
         to_return(:body => File.open("spec/ranking.html").read)
       mt = Mytyping.new
-      ret = mt.scrape_ranking("39679")
+      ret = mt.scrape_ranking(39679)
 
       expect(ret.count).to eq 9
       expect(ret.first).to eq ({

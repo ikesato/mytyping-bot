@@ -1,6 +1,7 @@
 require 'timecop'
 require 'active_record'
 require 'database_cleaner'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
 

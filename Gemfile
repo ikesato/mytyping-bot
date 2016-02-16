@@ -13,6 +13,6 @@ gem 'rake'
 gem 'rspec'
 gem 'timecop'
 gem 'database_cleaner'
-
-# for debug
+gem 'webmock'
 gem 'byebug'
+

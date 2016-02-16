@@ -11,8 +11,16 @@ require 'pp'
 
 last_synced_at = Time.now
 
+ActiveRecord::Base.establish_connection(
+  :adapter => 'sqlite3',
+  :database => 'db/db.sqlite'
+)
+
 notifier = Slack::Notifier.new "https://hooks.slack.com/services/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"
 notifier.ping "Bot started"
+
+
+
 
 mt = MyTyping.new
 

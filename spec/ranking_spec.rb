@@ -24,4 +24,36 @@ describe Ranking do
       expect(r.date).to eq Date.parse("2016-02-16")
     }.to change{Ranking.count}.by(1)
   end
+
+  it "should scrape" do
+    stub_request(:get, "http://typing.twi1.me/ranking?gameId=39679").
+      to_return(:body => File.open("spec/ranking.html").read)
+    rs = Ranking.scrape(39679)
+
+    expect(rs.length).to eq 9
+    expect(rs.first.attributes.symbolize_keys.except(:id, :game_id, :created_at, :updated_at)).to eq ({
+      :rank=>1,
+      :name=>"ikesatto",
+      :score=>5809,
+      :title=>"A+",
+      :speed=>5.8,
+      :correctly=>100.0,
+      :time=>28.4,
+      :types=>165,
+      :failures=>0,
+      :questions=>15,
+      :date=> Date.parse("2016-02-14")})
+    expect(rs.last.attributes.symbolize_keys.except(:id, :game_id, :created_at, :updated_at)).to eq ({
+      :rank=>9,
+      :name=>"t8295084",
+      :score=>2459,
+      :title=>"F++",
+      :speed=>2.4,
+      :correctly=>100.0,
+      :time=>67.1,
+      :types=>165,
+      :failures=>0,
+      :questions=>15,
+      :date=>Date.parse("2016-02-08")})
+  end
 end

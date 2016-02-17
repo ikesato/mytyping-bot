@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
-require "active_record"
-require "yaml"
-require "erb"
-require "logger"
+$LOAD_PATH << File.dirname(__FILE__)
+
+require 'active_record'
+require 'yaml'
+require 'erb'
+require 'logger'
+require 'db'
 
 namespace :db do
   MIGRATIONS_DIR = 'db/migrate'
-
-  # connect the database
-  ActiveRecord::Base.establish_connection(
-    :adapter => 'sqlite3',
-    :database => 'db/db.sqlite'
-  )
 
   # outpt logs
   ActiveRecord::Base.logger = Logger.new(STDOUT)

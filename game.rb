@@ -10,4 +10,11 @@ class Game < ActiveRecord::Base
     return nil if h.nil?
     new(name: h[:name], mytyping_id: h[:mytyping_id])
   end
+
+  def as_json(options={})
+    options = {} if options.blank?
+    options[:except] = [] if options[:except].blank?
+    options[:except] += [:created_at, :updated_at]
+    super(options)
+  end
 end

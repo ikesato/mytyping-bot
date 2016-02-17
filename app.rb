@@ -8,38 +8,23 @@ require 'eventmachine'
 require 'slack-notifier'
 require 'open-uri'
 require 'pp'
+require 'db'
 
-last_synced_at = Time.now
-
-ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :database => 'db/db.sqlite'
-)
 
 notifier = Slack::Notifier.new "https://hooks.slack.com/services/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"
 notifier.ping "Bot started"
 
-
-
-
-mt = MyTyping.new
+bot = Bot.new
 
 EM::defer do
   loop do
     sleep 10.minutes
-    mt.sync
-    msg = mt.notification_message
-    notifier.ping msg if msg && !msg.empty?
-    last_synced_at = Time.now
+    #msg = mt.notification_message
+    #notifier.ping msg if msg && !msg.empty?
   end
 end
 
 get '/heartbeat' do
-  "OK"
-end
-
-get '/force-sync' do
-  mt.sync
   "OK"
 end
 
@@ -48,34 +33,15 @@ post '/out-going' do
   p request.body.read
   p params[:text]
   text = params[:text]
-  if text =~ /^今の天気/
-    cw = weather.current_wheather
-    response = cw ? (cw.fine? ? "晴れ" : "雨") : "不明"
-  elsif text =~ /^今の通知は？/
-    response = weather.notification_message(ignore_sended: true)
+  if text =~ /^add (\d+)$/
+    response = bot.add(params[:text])
+    response = PP.pp(json, '')
+  elsif text =~ /^list$/
+    response = bot.list
+    response = PP.pp(json, '')
   elsif text =~ /^debug|デバッグ/
-    json = {now: Time.now.to_s, last_synced_at: last_synced_at, counter: counter, weather: weather.weather, notifications: weather.notifications}
+    json = {now: Time.now.to_s}
     response = PP.pp(json, '')
   end
   {text: response}.to_json
-end
-
-
-# For debug
-get '/debug/now' do
-  Time.now.to_s
-end
-
-get '/debug/weather' do
-  content_type 'text/plain'
-  PP.pp(weather.weather, '')
-end
-
-get '/debug/notifications' do
-  content_type 'text/plain'
-  PP.pp(weather.notifications, '')
-end
-
-get '/debug/counter' do
-  counter.to_s
 end

@@ -7,12 +7,37 @@ myTyping をスクレイプして、ランキングが更新されたかを監�
 
 ### commands
 
-|command            |description      |
-|-------------------|-----------------|
-|help               ||
-|list               ||
-|del <typing_id>    ||
-|ranking [typing_id]||
-|add <myTyping ID>  ||
-|settings           ||
-|set name=value     ||
+|command            |description        |
+|-------------------|-------------------|
+|help               |ヘルプ表示         |
+|list               |登録タイピング一覧 |
+|del <typing_id>    |タイピング削除     |
+|add <myTyping ID>  |タイピング追加     |
+|ranking [typing_id]|ランキング表示     |
+|updates            |ランキング更新表示 |
+|settings           |設定表示           |
+|set name=value     |設定               |
+
+#### list
+
+> list
+1  1234560  親指シフト練習１
+2  1234561  abcdefghiljklm２
+
+
+#### del <typing_id>
+
+> del 1
+deleted {id:1, mytyping_id:1234560, name:親指シフト練習１}
+OK
+
+#### add <myTyping ID>
+
+> add 1234562
+added {id:3, mytyping_id:1234562, name:親指シフト練習２}
+OK
+
+#### ranking [typing_id]
+
+> ranking 1
+rank  name  score

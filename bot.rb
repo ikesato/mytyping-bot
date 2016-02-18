@@ -19,6 +19,7 @@ class Bot
     criteria.each do |g|
       rs = Ranking.scrape(g.mytyping_id)
       rs.each do |r|
+        r.game_id = g.id
         return {error: r.errors.full_messages} unless r.save
       end
     end

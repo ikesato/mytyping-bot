@@ -9,6 +9,7 @@ require 'slack-notifier'
 require 'open-uri'
 require 'pp'
 require 'db'
+require 'bot'
 
 
 notifier = Slack::Notifier.new "https://hooks.slack.com/services/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"

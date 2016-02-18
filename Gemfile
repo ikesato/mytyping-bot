@@ -16,12 +16,9 @@ group :production do
 end
 group :development, :test do
   gem 'sqlite3'
+  gem 'rspec'
+  gem 'timecop'
+  gem 'database_cleaner'
+  gem 'webmock'
+  gem 'byebug'
 end
-
-# for rspec
-gem 'rspec'
-gem 'timecop'
-gem 'database_cleaner'
-gem 'webmock'
-gem 'byebug'
-

@@ -18,10 +18,10 @@ describe Game do
     expect(g.rankings).to be_empty
     Ranking.create(game_id: g.id, rank: 1, name: "hoge", score: 10, title: "A+",
                    speed: 10.1, correctly: 99.9, time: 30.0, types: 160,
-                   failures: 2, questions: 5, date: "2016-02-16")
+                   failures: 2, questions: 5, date: "2016-02-16", scraped_at: Time.now)
     Ranking.create(game_id: g.id, rank: 2, name: "fuga", score: 9, title: "B",
                    speed: 10.0, correctly: 99.8, time: 31.0, types: 159,
-                   failures: 4, questions: 6, date: "2016-02-15")
+                   failures: 4, questions: 6, date: "2016-02-15", scraped_at: Time.now)
     g = Game.find(g.id)
     expect(g.rankings.length).to eq 2
     expect(g.rankings.where(rank: 1).first.name).to eq "hoge"

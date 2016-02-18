@@ -7,8 +7,9 @@ class Ranking < ActiveRecord::Base
     mt = Mytyping.new
     list = mt.scrape_ranking(mytyping_id)
     return nil if list.nil?
+    now = Time.now
     list.map do |l|
-      new(l)
+      new(l.merge(scraped_at: now))
     end
   end
 end

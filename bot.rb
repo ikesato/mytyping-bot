@@ -27,9 +27,19 @@ class Bot
   end
 
   def ranking(game_id = nil)
-    criteria = Ranking.all.order(:game_id, :rank)
-    criteria = criteria.where(game_id: game_id) if game_id
-    format_ranking(criteria)
+    rankings = Ranking.all.order(game_id: :asc, scraped_at: :desc, rank: :asc)
+    rankings = rankings.where(game_id: game_id) if game_id
+    prev = nil
+    rankings = rankings.map do |r|
+      if prev && prev[:game_id] == r.game_id && prev[:scraped_at] != r.scraped_at
+        prev = nil
+        nil
+      else
+        prev = {game_id: r.game_id, scraped_at: r.scraped_at}
+        r
+      end
+    end
+    format_ranking(rankings.compact)
   end
 
   def format_ranking(rankings)

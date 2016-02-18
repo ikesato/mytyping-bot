@@ -26,7 +26,7 @@ class Mytyping
     doc.css('table#rankingTable tr').each do |row|
       tds = row.css('td')
       next if tds.length < 11
-      break if (count+=1) >= 5
+      break if (count+=1) > 5
       rank = tds[0].text.strip.to_i
       name = tds[1].text.strip
       score = tds[2].text.strip.to_i

@@ -21,7 +21,7 @@ describe Mytyping do
       mt = Mytyping.new
       ret = mt.scrape_ranking(39679)
 
-      expect(ret.count).to eq 9
+      expect(ret.count).to eq 5
       expect(ret.first).to eq ({
         :rank=>1,
         :name=>"ikesatto",
@@ -35,17 +35,17 @@ describe Mytyping do
         :questions=>15,
         :date=> Date.parse("2016-02-14")})
       expect(ret.last).to eq ({
-        :rank=>9,
-        :name=>"t8295084",
-        :score=>2459,
-        :title=>"F++",
-        :speed=>2.4,
-        :correctly=>100.0,
-        :time=>67.1,
-        :types=>165,
-        :failures=>0,
+        :rank=>5,
+        :name=>"1226",
+        :score=>3841,
+        :title=>"D++",
+        :speed=>3.9,
+        :correctly=>97.9,
+        :time=>36.7,
+        :types=>144,
+        :failures=>3,
         :questions=>15,
-        :date=>Date.parse("2016-02-08")})
+        :date=>Date.parse("2015-12-29")})
     end
   end
 end

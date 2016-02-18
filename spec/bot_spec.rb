@@ -14,7 +14,6 @@ describe Bot do
       Game.create!(mytyping_id: 39683, name: "親指シフト練習６ー半濁音の徹底マスター")
       bot = Bot.new
       s = bot.retrieve_ranking
-puts s
       expect(s).to match /ikesatto/
     end
   end

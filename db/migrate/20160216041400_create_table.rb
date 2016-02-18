@@ -10,6 +10,7 @@ class CreateTable < ActiveRecord::Migration
     create_table :rankings do |t|
       t.integer :game_id, null: false
       t.integer :rank, null: false
+      t.datetime :scraped_at, null: false
       t.string :name, null: false
       t.integer :score, null: false
       t.string :title, null: false

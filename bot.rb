@@ -29,6 +29,23 @@ class Bot
   def ranking(game_id = nil)
     criteria = Ranking.all.order(:game_id, :rank)
     criteria = criteria.where(game_id: game_id) if game_id
-    criteria.as_json
+    format_ranking(criteria)
+  end
+
+  def format_ranking(rankings)
+    prev = nil
+    header = ["rank,date,score,speed,time,types,failures,name,title"]
+    list = []
+    rankings.each do |r|
+      if prev.nil? || prev != r.game_id
+        list << [] unless list.empty?
+        list << "*#{r.game.name}* <#{Mytyping.ranking_url(r.game.mytyping_id)}|More>"
+        list << header
+      end
+      list << "#{r.rank},#{r.date},#{r.score},#{r.speed},#{r.time},#{r.types},#{r.failures},#{r.name},#{r.title}"
+      prev = r.game_id
+    end
+    list << "no rankings" if list.empty?
+    list.join("\n")
   end
 end

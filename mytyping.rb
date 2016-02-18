@@ -13,14 +13,20 @@ class Mytyping
     {mytyping_id: gameid, name: name}
   end
 
+  def self.ranking_url(gameid)
+    "http://typing.twi1.me/ranking?gameId=#{gameid}"
+  end
+
   def scrape_ranking(gameid)
-    url = "http://typing.twi1.me/ranking?gameId=#{gameid}"
+    url = Mytyping.ranking_url(gameid)
     doc = fetch(url)
     return nil unless doc
     list = []
+    count = 0
     doc.css('table#rankingTable tr').each do |row|
       tds = row.css('td')
       next if tds.length < 11
+      break if (count+=1) >= 5
       rank = tds[0].text.strip.to_i
       name = tds[1].text.strip
       score = tds[2].text.strip.to_i

@@ -42,8 +42,7 @@ post '/out-going' do
     response = PP.pp(response, '')
   elsif text =~ /^ranking/
     game_id = $1.to_i if text =~ /^ranking +(\d+)$/
-    response = bot.retrieve_ranking(game_id)
-    response = PP.pp(response, '')
+    response = bot.format_ranking(bot.retrieve_ranking(game_id))
   elsif text =~ /^debug|デバッグ/
     response = {now: Time.now.to_s}
     response = PP.pp(response, '')

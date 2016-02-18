@@ -31,8 +31,8 @@ end
 
 post '/out-going' do
   content_type 'application/json; charset=utf-8'
-  p request.body.read
-  p params[:text]
+  STDERR.puts request.body.read
+  STDERR.puts params[:text]
   text = params[:text]
   if text =~ /^add (\d+)$/
     response = bot.add(params[:text])

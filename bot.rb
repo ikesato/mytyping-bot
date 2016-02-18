@@ -13,7 +13,7 @@ class Bot
     Game.all.order(:id).map(&:as_json)
   end
 
-  def retrieve_ranking(game_id: nil)
+  def retrieve_ranking(game_id = nil)
     criteria = Game.all
     criteria = criteria.where(game_id: game_id) if game_id
     criteria.each do |g|
@@ -25,7 +25,7 @@ class Bot
     ranking(game_id)
   end
 
-  def ranking(game_id: nil)
+  def ranking(game_id = nil)
     criteria = Ranking.all.order(:game_id, :rank)
     criteria = criteria.where(game_id: game_id) if game_id
     criteria.as_json

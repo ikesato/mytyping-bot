@@ -31,7 +31,7 @@ end
 
 post '/out-going' do
   content_type 'application/json; charset=utf-8'
-  STDERR.puts request.body.read
+  p request.body.read
   p params[:text]
   text = params[:text]
   if text =~ /^add +(\d+)$/
@@ -42,7 +42,7 @@ post '/out-going' do
     response = PP.pp(response, '')
   elsif text =~ /^ranking/
     game_id = $1.to_i if text =~ /^ranking +($\d+)$/
-    response = bot.ranking(game_id)
+    response = bot.retrieve_ranking(game_id)
     response = PP.pp(response, '')
   elsif text =~ /^debug|デバッグ/
     response = {now: Time.now.to_s}

@@ -34,11 +34,15 @@ post '/out-going' do
   STDERR.puts request.body.read
   p params[:text]
   text = params[:text]
-  if text =~ /^add (\d+)$/
+  if text =~ /^add +(\d+)$/
     response = bot.add($1.to_i)
     response = PP.pp(response, '')
   elsif text =~ /^list$/
     response = bot.list
+    response = PP.pp(response, '')
+  elsif text =~ /^ranking/
+    game_id = $1.to_i if text =~ /^ranking +($\d+)$/
+    response = bot.ranking(game_id)
     response = PP.pp(response, '')
   elsif text =~ /^debug|デバッグ/
     response = {now: Time.now.to_s}

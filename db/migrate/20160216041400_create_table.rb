@@ -22,7 +22,7 @@ class CreateTable < ActiveRecord::Migration
       t.integer :questions, null: false
       t.date :date, null: false
       t.timestamps null: false
-      t.index [:game_id, :rank], :unique => true
+      t.index [:game_id, :rank, :scraped_at], :unique => true
     end
   end
 end

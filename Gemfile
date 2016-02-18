@@ -9,8 +9,14 @@ gem 'slack-notifier'
 gem 'activesupport'
 gem 'nokogiri'
 gem 'activerecord'
-gem 'sqlite3'
 gem 'rake'
+
+group :production do
+  gem 'pg'
+end
+group :development, :test do
+  gem 'sqlite3'
+end
 
 # for rspec
 gem 'rspec'

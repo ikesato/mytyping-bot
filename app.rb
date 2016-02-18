@@ -12,7 +12,7 @@ require 'db'
 require 'bot'
 
 
-notifier = Slack::Notifier.new "https://hooks.slack.com/services/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"
+notifier = Slack::Notifier.new "https://hooks.slack.com/services/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"
 notifier.ping "Bot started"
 
 bot = Bot.new

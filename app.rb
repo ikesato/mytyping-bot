@@ -39,10 +39,10 @@ post '/out-going' do
     response = PP.pp(json, '')
   elsif text =~ /^list$/
     response = bot.list
-    response = PP.pp(json, '')
+    response = PP.pp(response, '')
   elsif text =~ /^debug|デバッグ/
-    json = {now: Time.now.to_s}
-    response = PP.pp(json, '')
+    response = {now: Time.now.to_s}
+    response = PP.pp(response, '')
   end
   {text: response}.to_json
 end

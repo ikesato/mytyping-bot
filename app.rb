@@ -36,7 +36,7 @@ post '/out-going' do
   text = params[:text]
   if text =~ /^add (\d+)$/
     response = bot.add(params[:text])
-    response = PP.pp(json, '')
+    response = PP.pp(response, '')
   elsif text =~ /^list$/
     response = bot.list
     response = PP.pp(response, '')

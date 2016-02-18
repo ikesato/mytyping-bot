@@ -15,7 +15,7 @@ class Bot
 
   def retrieve_ranking(game_id = nil)
     criteria = Game.all
-    criteria = criteria.where(game_id: game_id) if game_id
+    criteria = criteria.where(id: game_id) if game_id
     criteria.each do |g|
       rs = Ranking.scrape(g.mytyping_id)
       rs.each do |r|

@@ -32,10 +32,10 @@ end
 post '/out-going' do
   content_type 'application/json; charset=utf-8'
   STDERR.puts request.body.read
-  STDERR.puts params[:text]
+  p params[:text]
   text = params[:text]
   if text =~ /^add (\d+)$/
-    response = bot.add(params[:text])
+    response = bot.add(params[:text].to_i)
     response = PP.pp(response, '')
   elsif text =~ /^list$/
     response = bot.list

@@ -49,7 +49,7 @@ class Bot
     rankings.each do |r|
       if prev.nil? || prev != r.game_id
         list << [] unless list.empty?
-        list << "*#{r.game.name}* <#{Mytyping.ranking_url(r.game.mytyping_id)}|More>"
+        list << "*#{r.game.name}* <#{Mytyping.game_url(r.game.mytyping_id)}|Game> <#{Mytyping.ranking_url(r.game.mytyping_id)}|Ranking>"
         list << header
       end
       list << "#{r.rank},#{r.date},#{r.score},#{r.speed},#{r.time},#{r.types},#{r.failures},#{r.name},#{r.title}"

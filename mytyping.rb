@@ -4,17 +4,21 @@ require 'nokogiri'
 
 
 class Mytyping
+  def self.game_url(gameid)
+    "http://typing.twi1.me/game/#{gameid}"
+  end
+
+  def self.ranking_url(gameid)
+    "http://typing.twi1.me/ranking?gameId=#{gameid}"
+  end
+
   def scrape_game(gameid)
-    url = "http://typing.twi1.me/game/#{gameid}"
+    url = Mytyping.game_url(gameid)
     doc = fetch(url)
     return nil unless doc
     return nil if doc.css('#mainArea h1').length == 0
     name = doc.css('#mainArea h1').text.strip
     {mytyping_id: gameid, name: name}
-  end
-
-  def self.ranking_url(gameid)
-    "http://typing.twi1.me/ranking?gameId=#{gameid}"
   end
 
   def scrape_ranking(gameid)

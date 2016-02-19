@@ -70,6 +70,7 @@ class Bot
         return {result: :ng, error: r.errors.full_messages} unless r.save
       end
     end
+    Ranking.destroy_all("scraped_at <= ?", 1.day.ago)
     {result: :success, games: games, updates: count}
   end
 end

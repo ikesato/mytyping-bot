@@ -27,19 +27,19 @@ class Bot
   end
 
   def ranking(game_id = nil)
-    rankings = Ranking.all.order(game_id: :asc, scraped_at: :desc, rank: :asc)
+    rankings = Ranking.all.order(scraped_at: :desc, game_id: :asc, rank: :asc)
     rankings = rankings.where(game_id: game_id) if game_id
     prev = nil
-    rankings = rankings.map do |r|
+    list = []
+    rankings.each do |r|
       if prev && prev[:game_id] == r.game_id && prev[:scraped_at] != r.scraped_at
-        prev = nil
-        nil
+        break
       else
         prev = {game_id: r.game_id, scraped_at: r.scraped_at}
-        r
+        list << r
       end
     end
-    format_ranking(rankings.compact)
+    format_ranking(list.compact)
   end
 
   def format_ranking(rankings)

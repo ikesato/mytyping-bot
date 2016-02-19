@@ -34,16 +34,19 @@ post '/out-going' do
   p request.body.read
   p params[:text]
   text = params[:text]
-  if text =~ /^add +(\d+)$/
+  if text =~ /^\s*add\s+(\d+)\s*$/
     response = bot.add($1.to_i)
     response = PP.pp(response, '')
-  elsif text =~ /^list$/
+  elsif text =~ /^\s*list\s*$/
     response = bot.list
     response = PP.pp(response, '')
-  elsif text =~ /^ranking/
-    game_id = $1.to_i if text =~ /^ranking +(\d+)$/
-    response = bot.retrieve_ranking(game_id)
-  elsif text =~ /^debug|デバッグ/
+  elsif text =~ /^\s*ranking/
+    game_id = $1.to_i if text =~ /ranking\s+(\d+)\s*$/
+    response = bot.ranking(game_id)
+  elsif text =~ /^\s*sync\s*$/
+    response = bot.sync
+    response = PP.pp(response, '')
+  elsif text =~ /^debug/
     response = {now: Time.now.to_s}
     response = PP.pp(response, '')
   end

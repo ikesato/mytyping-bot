@@ -49,7 +49,7 @@ class Bot
         end
         list << "*#{r.game.name}* <#{Mytyping.game_url(r.game.mytyping_id)}|Game> <#{Mytyping.ranking_url(r.game.mytyping_id)}|Ranking>"
         list << header
-        footer = "(last updated : #{r.scraped_at})"
+        footer = "(scraped at : #{r.scraped_at})"
       end
       list << "#{r.rank},#{r.date},#{r.score},#{r.speed},#{r.time},#{r.types},#{r.failures},#{r.name},#{r.title}"
       prev = r.game_id

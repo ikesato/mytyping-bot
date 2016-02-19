@@ -17,4 +17,9 @@ class Game < ActiveRecord::Base
     options[:except] += [:created_at, :updated_at]
     super(options)
   end
+
+  def last_rankings
+    maxt = rankings.maximum(:scraped_at)
+    rankings.where(scraped_at: maxt)
+  end
 end

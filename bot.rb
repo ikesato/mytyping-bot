@@ -27,17 +27,11 @@ class Bot
   end
 
   def ranking(game_id = nil)
-    rankings = Ranking.all.order(scraped_at: :desc, game_id: :asc, rank: :asc)
-    rankings = rankings.where(game_id: game_id) if game_id
-    prev = nil
+    gs = Game.all.order(:id)
+    gs = gs.where(id: game_id) if game_id
     list = []
-    rankings.each do |r|
-      if prev && prev[:game_id] == r.game_id && prev[:scraped_at] != r.scraped_at
-        break
-      else
-        prev = {game_id: r.game_id, scraped_at: r.scraped_at}
-        list << r
-      end
+    gs.each do |g|
+      list += g.last_rankings.order(:rank).to_a
     end
     format_ranking(list.compact)
   end
@@ -57,5 +51,8 @@ class Bot
     end
     list << "no rankings" if list.empty?
     list.join("\n")
+  end
+
+  def sync
   end
 end

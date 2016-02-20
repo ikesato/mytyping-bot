@@ -46,6 +46,8 @@ _*roukies*_
   間近３日間の新規ユーザー
 _*sync*_
   ランキング更新
+_*sync-updates*_
+  ランキング更新と間近３日間の更新表示
 _*help*_
   show this help
 EOF
@@ -74,6 +76,10 @@ post '/out-going' do
     response = bot.rookies
   elsif text =~ /^\s*updates\s*$/
     response = bot.updates
+  elsif text =~ /^\s*sync-updates\s*$/
+    response = bot.sync
+    response += "\n"
+    response += bot.updates
   elsif text =~ /^\s*help\s*$/
     response = help
   elsif text =~ /^debug/

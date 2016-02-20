@@ -125,8 +125,8 @@ describe Bot do
       rs << nr
       Ranking.create!(rs)
       updates = bot.updates
-      expect(updates).to match /hoge/
-      expect(updates).to match /momoka.*score.*5808.*12345/
+      expect(updates).to match /^Rookie.*hoge.*$/
+      expect(updates).to match /^Update.*momoka.*score.*5808.*12345.*$/
     end
   end
 end

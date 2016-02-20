@@ -110,13 +110,15 @@ class Bot
     gs = gs.where(id: game_id) if game_id
     gs.each do |g|
       newr = g.last_rankings.order(:rank)
-      oldr = g.past_rankings.order(:rank)
       newr.each do |rn|
-        ro = oldr.where(name: rn.name).first
-        next unless ro
-        next if rn.date == ro.date
-        ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
-        updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
+        g.rankings.where(name: rn.name).order(scraped_at: :desc).each do |ro|
+          next if rn.id == ro.id
+          next if rn.date == ro.date
+          break if rn.scraped_at - ro.scraped_at > 3.days
+          ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
+          updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
+          break
+        end
       end
     end
     updates

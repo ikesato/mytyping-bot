@@ -22,4 +22,9 @@ class Game < ActiveRecord::Base
     maxt = rankings.maximum(:scraped_at)
     rankings.where(scraped_at: maxt)
   end
+
+  def past_rankings
+    t = rankings.where("scraped_at >= ?", 3.day.ago).minimum(:scraped_at)
+    rankings.where(scraped_at: t)
+  end
 end

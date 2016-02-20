@@ -23,7 +23,7 @@ class Bot
     format_ranking(list.compact)
   end
 
-  def format_ranking(rankings)
+  def format_ranking(rankings, title="rankings")
     prev = nil
     header = ["rank,date,score,speed,time,types,failures,name,title"]
     footer = nil
@@ -41,7 +41,7 @@ class Bot
       list << "#{r.rank},#{r.date},#{r.score},#{r.speed},#{r.time},#{r.types},#{r.failures},#{r.name},#{r.title}"
       prev = r.game_id
     end
-    list << (list.empty? ? "no rankings" : footer)
+    list << (list.empty? ? "no #{title}" : footer)
     list.join("\n")
   end
 
@@ -57,7 +57,62 @@ class Bot
         return {result: :ng, error: r.errors.full_messages} unless r.save
       end
     end
-    deleted = Ranking.destroy_all(["scraped_at <= ?", 1.day.ago])
+    deleted = Ranking.destroy_all(["scraped_at <= ?", 10.day.ago])
     {result: :success, games: games, updates: count, deleted: deleted.count}
+  end
+
+  def updates
+    list = []
+    Game.all.each do |g|
+      roukies = find_roukies
+
+      # search updates
+      newr = g.last_rankings.order(:rank)
+      oldr = g.past_rankings.order(:rank)
+      updates = []
+      newr.each do |rn|
+        ro = oldr.where(name: rn.name).first
+        next unless ro
+        next if rn.date == ro.date
+        ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
+        updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
+      end
+
+      # format output
+      if roukies.count > 0 || updates.count > 0
+        list << [] if list.count > 0
+        list << "*#{g.name}* <#{Mytyping.game_url(g.mytyping_id)}|Game> <#{Mytyping.ranking_url(g.mytyping_id)}|Ranking>"
+        roukies.each do |r|
+          list << "Roukie " + r.slice(:name,:rank,:date,:score,:speed,:time,:types,:failures,:title).to_json
+        end
+        updates.each do |u|
+          list << "Update " + u.to_json
+        end
+        footer = "(scraped at : #{newr.first.scraped_at})"
+      end
+    end
+    list << "no updates" if list.empty?
+    list.join("\n")
+  end
+
+  def roukies
+    rs = find_roukies
+    format_ranking(rs, "roukies")
+  end
+
+  private
+  def find_roukies
+    roukies = []
+    Game.all.each do |g|
+      newr = g.last_rankings.order(:rank)
+      oldr = g.past_rankings.order(:rank)
+
+      # search roukie
+      roukies = []
+      newr.each do |r|
+        roukies << r if oldr.where(name: r.name).count == 0
+      end
+    end
+    roukies
   end
 end

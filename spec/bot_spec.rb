@@ -18,4 +18,115 @@ describe Bot do
       expect(s).to match /ikesatto/
     end
   end
+
+  describe "roukies" do
+    def default_rankings(g, scraped_at)
+      [{
+         :game_id=>g.id,
+         :scraped_at=>scraped_at,
+         :rank=>1,
+         :name=>"ikesatto",
+         :score=>5809,
+         :title=>"A+",
+         :speed=>5.8,
+         :correctly=>100.0,
+         :time=>28.4,
+         :types=>165,
+         :failures=>0,
+         :questions=>15,
+         :date=> Date.parse("2016-02-14")
+       },
+       {
+         :game_id=>g.id,
+         :scraped_at=>scraped_at,
+         :rank=>2,
+         :name=>"momoka",
+         :score=>5808,
+         :title=>"A",
+         :speed=>5.7,
+         :correctly=>100.0,
+         :time=>28.4,
+         :types=>165,
+         :failures=>0,
+         :questions=>15,
+         :date=> Date.parse("2016-02-14")
+       }
+      ]
+    end
+
+    it "should find roukies" do
+      g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
+      Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00")))
+      bot = Bot.new
+      expect(bot.roukies).to match /no roukies/
+
+      rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"))
+      nr = rs.last.dup
+      nr[:rank] = 3
+      nr[:name] = "hoge"
+      rs << nr
+      Ranking.create!(rs)
+      expect(bot.roukies).to match /hoge/
+    end
+  end
+
+  describe "updates" do
+    def default_rankings(g, scraped_at, date)
+      [{
+         :game_id=>g.id,
+         :scraped_at=>scraped_at,
+         :rank=>1,
+         :name=>"ikesatto",
+         :score=>5809,
+         :title=>"A+",
+         :speed=>5.8,
+         :correctly=>100.0,
+         :time=>28.4,
+         :types=>165,
+         :failures=>0,
+         :questions=>15,
+         :date=> date
+       },
+       {
+         :game_id=>g.id,
+         :scraped_at=>scraped_at,
+         :rank=>2,
+         :name=>"momoka",
+         :score=>5808,
+         :title=>"A",
+         :speed=>5.7,
+         :correctly=>100.0,
+         :time=>28.4,
+         :types=>165,
+         :failures=>0,
+         :questions=>15,
+         :date=> date
+       }
+      ]
+    end
+
+    it "should find roukies" do
+      g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
+      Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00"), Date.parse("2016-02-20")))
+
+      bot = Bot.new
+      expect(bot.updates).to match /no updates/
+
+      rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"), Date.parse("2016-02-20"))
+      # updates
+      mr = rs.last
+      mr[:score] = "12345"
+      mr[:date] = Date.parse("2016-02-21")
+
+      # roukie
+      nr = rs.last.dup
+      nr[:rank] = 3
+      nr[:name] = "hoge"
+      rs << nr
+      Ranking.create!(rs)
+      updates = bot.updates
+      expect(updates).to match /hoge/
+      expect(updates).to match /momoka.*score.*5808.*12345/
+    end
+  end
 end

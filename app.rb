@@ -32,6 +32,8 @@ end
 post '/out-going' do
   content_type 'application/json; charset=utf-8'
   p request.body.read
+  return {text: nil}.to_json if params[:user_name] == "slackbot"
+
   p params[:text]
   text = params[:text]
   if text =~ /^\s*add\s+(\d+)\s*$/

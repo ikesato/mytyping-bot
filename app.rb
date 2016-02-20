@@ -77,7 +77,7 @@ post '/out-going' do
   elsif text =~ /^\s*updates\s*$/
     response = bot.updates
   elsif text =~ /^\s*sync-updates\s*$/
-    response = bot.sync
+    response = PP.pp(bot.sync, '')
     response += "\n"
     response += bot.updates
   elsif text =~ /^\s*help\s*$/

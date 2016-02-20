@@ -88,7 +88,7 @@ class Bot
         updates.each do |u|
           list << "Update " + u.to_json
         end
-        footer = "(scraped at : #{newr.first.scraped_at})"
+        list << "(scraped at : #{newr.first.scraped_at})"
       end
     end
     list << "no updates" if list.empty?

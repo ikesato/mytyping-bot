@@ -47,7 +47,7 @@ post '/out-going' do
     response = bot.sync
     response = PP.pp(response, '')
   elsif text =~ /^\s*rookies\s*$/
-    response = bot.rookie
+    response = bot.rookies
   elsif text =~ /^\s*updates\s*$/
     response = bot.updates
   elsif text =~ /^debug/

@@ -55,6 +55,8 @@ post '/out-going' do
   elsif text =~ /^debug/
     response = {now: Time.now.to_s}
     response = PP.pp(response, '')
+  else
+    response = "I can't recognize command. => [#{text}]"
   end
   {text: response}.to_json
 end

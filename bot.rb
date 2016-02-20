@@ -71,6 +71,6 @@ class Bot
       end
     end
     deleted = Ranking.destroy_all(["scraped_at <= ?", 1.day.ago])
-    {result: :success, games: games, updates: count, deleted: deleted}
+    {result: :success, games: games, updates: count, deleted: deleted.count}
   end
 end

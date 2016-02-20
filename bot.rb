@@ -64,19 +64,8 @@ class Bot
   def updates
     list = []
     Game.all.each do |g|
-      rookies = find_rookies
-
-      # search updates
-      newr = g.last_rankings.order(:rank)
-      oldr = g.past_rankings.order(:rank)
-      updates = []
-      newr.each do |rn|
-        ro = oldr.where(name: rn.name).first
-        next unless ro
-        next if rn.date == ro.date
-        ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
-        updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
-      end
+      rookies = find_rookies(g.id)
+      updates = find_updates(g.id)
 
       # format output
       if rookies.count > 0 || updates.count > 0
@@ -88,7 +77,7 @@ class Bot
         updates.each do |u|
           list << "Update " + u.to_json
         end
-        list << "(scraped at : #{newr.first.scraped_at})"
+        list << "(scraped at : #{g.last_rankings.first.scraped_at})"
       end
     end
     list << "no updates" if list.empty?
@@ -101,18 +90,35 @@ class Bot
   end
 
   private
-  def find_rookies
+  def find_rookies(game_id=nil)
     rookies = []
-    Game.all.each do |g|
+    gs = Game.all.order(:id)
+    gs = gs.where(id: game_id) if game_id
+    gs.each do |g|
       newr = g.last_rankings.order(:rank)
       oldr = g.past_rankings.order(:rank)
-
-      # search rookie
-      rookies = []
       newr.each do |r|
-        rookies << r if oldr.where(name: r.name).count == 0
+        rookies << r unless oldr.where(name: r.name).exists?
       end
     end
     rookies
+  end
+
+  def find_updates(game_id=nil)
+    updates = []
+    gs = Game.all.order(:id)
+    gs = gs.where(id: game_id) if game_id
+    gs.each do |g|
+      newr = g.last_rankings.order(:rank)
+      oldr = g.past_rankings.order(:rank)
+      newr.each do |rn|
+        ro = oldr.where(name: rn.name).first
+        next unless ro
+        next if rn.date == ro.date
+        ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
+        updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
+      end
+    end
+    updates
   end
 end

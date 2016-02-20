@@ -32,21 +32,21 @@ end
 
 def help
   <<EOF
-*list*
+_*list*_
   登録タイピング一覧 
-*del <typing_id>*
+_*del <typing_id>*_
   タイピング削除
-*add <myTyping ID>
+_*add <myTyping ID>*_
   タイピング追加
-*ranking [typing_id]*
+_*ranking [typing_id]*_
   ランキング表示 
-*updates*
+_*updates*_
   間近３日間の更新表示
-*roukies*
+_*roukies*_
   間近３日間の新規ユーザー
-*sync*
+_*sync*_
   ランキング更新
-*help*
+_*help*_
   show this help
 EOF
 end

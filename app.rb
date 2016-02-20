@@ -29,6 +29,28 @@ get '/heartbeat' do
   "OK"
 end
 
+
+def help
+  <<EOF
+*list*
+  登録タイピング一覧 
+*del <typing_id>*
+  タイピング削除
+*add <myTyping ID>
+  タイピング追加
+*ranking [typing_id]*
+  ランキング表示 
+*updates*
+  間近３日間の更新表示
+*roukies*
+  間近３日間の新規ユーザー
+*sync*
+  ランキング更新
+*help*
+  show this help
+EOF
+end
+
 post '/out-going' do
   content_type 'application/json; charset=utf-8'
   p request.body.read
@@ -52,6 +74,8 @@ post '/out-going' do
     response = bot.rookies
   elsif text =~ /^\s*updates\s*$/
     response = bot.updates
+  elsif text =~ /^\s*help\s*$/
+    response = help
   elsif text =~ /^debug/
     response = {now: Time.now.to_s}
     response = PP.pp(response, '')

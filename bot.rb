@@ -115,7 +115,7 @@ class Bot
           next if rn.id == ro.id
           break if rn.scraped_at - ro.scraped_at > 3.days
           ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
-          next if ro.changes.empty?
+          next if ro.changes.except(:rank).empty?
           updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
           break
         end

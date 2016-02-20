@@ -113,9 +113,9 @@ class Bot
       newr.each do |rn|
         g.rankings.where(name: rn.name).order(scraped_at: :desc).each do |ro|
           next if rn.id == ro.id
-          next if rn.date == ro.date
           break if rn.scraped_at - ro.scraped_at > 3.days
           ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
+          next if ro.changes.empty?
           updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)
           break
         end

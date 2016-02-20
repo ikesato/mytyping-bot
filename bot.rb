@@ -64,7 +64,7 @@ class Bot
   def updates
     list = []
     Game.all.each do |g|
-      roukies = find_roukies
+      rookies = find_rookies
 
       # search updates
       newr = g.last_rankings.order(:rank)
@@ -79,11 +79,11 @@ class Bot
       end
 
       # format output
-      if roukies.count > 0 || updates.count > 0
+      if rookies.count > 0 || updates.count > 0
         list << [] if list.count > 0
         list << "*#{g.name}* <#{Mytyping.game_url(g.mytyping_id)}|Game> <#{Mytyping.ranking_url(g.mytyping_id)}|Ranking>"
-        roukies.each do |r|
-          list << "Roukie " + r.slice(:name,:rank,:date,:score,:speed,:time,:types,:failures,:title).to_json
+        rookies.each do |r|
+          list << "Rookie " + r.slice(:name,:rank,:date,:score,:speed,:time,:types,:failures,:title).to_json
         end
         updates.each do |u|
           list << "Update " + u.to_json
@@ -95,24 +95,24 @@ class Bot
     list.join("\n")
   end
 
-  def roukies
-    rs = find_roukies
-    format_ranking(rs, "roukies")
+  def rookies
+    rs = find_rookies
+    format_ranking(rs, "rookies")
   end
 
   private
-  def find_roukies
-    roukies = []
+  def find_rookies
+    rookies = []
     Game.all.each do |g|
       newr = g.last_rankings.order(:rank)
       oldr = g.past_rankings.order(:rank)
 
-      # search roukie
-      roukies = []
+      # search rookie
+      rookies = []
       newr.each do |r|
-        roukies << r if oldr.where(name: r.name).count == 0
+        rookies << r if oldr.where(name: r.name).count == 0
       end
     end
-    roukies
+    rookies
   end
 end

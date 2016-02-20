@@ -19,7 +19,7 @@ describe Bot do
     end
   end
 
-  describe "roukies" do
+  describe "rookies" do
     def default_rankings(g, scraped_at)
       [{
          :game_id=>g.id,
@@ -54,11 +54,11 @@ describe Bot do
       ]
     end
 
-    it "should find roukies" do
+    it "should find rookies" do
       g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
       Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00")))
       bot = Bot.new
-      expect(bot.roukies).to match /no roukies/
+      expect(bot.rookies).to match /no rookies/
 
       rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"))
       nr = rs.last.dup
@@ -66,7 +66,7 @@ describe Bot do
       nr[:name] = "hoge"
       rs << nr
       Ranking.create!(rs)
-      expect(bot.roukies).to match /hoge/
+      expect(bot.rookies).to match /hoge/
     end
   end
 
@@ -105,7 +105,7 @@ describe Bot do
       ]
     end
 
-    it "should find roukies" do
+    it "should find rookies" do
       g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
       Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00"), Date.parse("2016-02-20")))
 
@@ -118,7 +118,7 @@ describe Bot do
       mr[:score] = "12345"
       mr[:date] = Date.parse("2016-02-21")
 
-      # roukie
+      # rookie
       nr = rs.last.dup
       nr[:rank] = 3
       nr[:name] = "hoge"

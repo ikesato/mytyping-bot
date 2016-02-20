@@ -13,7 +13,8 @@ describe Bot do
       Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
       Game.create!(mytyping_id: 39683, name: "親指シフト練習６ー半濁音の徹底マスター")
       bot = Bot.new
-      s = bot.retrieve_ranking
+      bot.sync
+      s = bot.ranking
       expect(s).to match /ikesatto/
     end
   end

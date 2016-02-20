@@ -13,19 +13,6 @@ class Bot
     Game.all.order(:id).map(&:as_json)
   end
 
-  def retrieve_ranking(game_id = nil)
-    criteria = Game.all
-    criteria = criteria.where(id: game_id) if game_id
-    criteria.each do |g|
-      rs = Ranking.scrape(g.mytyping_id)
-      rs.each do |r|
-        r.game_id = g.id
-        return {result: :ng, error: r.errors.full_messages} unless r.save
-      end
-    end
-    ranking(game_id)
-  end
-
   def ranking(game_id = nil)
     gs = Game.all.order(:id)
     gs = gs.where(id: game_id) if game_id

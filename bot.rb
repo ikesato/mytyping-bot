@@ -1,5 +1,6 @@
 require 'game'
 require 'ranking'
+require 'setting'
 
 class Bot
   def add(mytyping_id)
@@ -57,7 +58,7 @@ class Bot
         return {result: :ng, error: r.errors.full_messages} unless r.save
       end
     end
-    deleted = Ranking.destroy_all(["scraped_at <= ?", 10.day.ago])
+    deleted = Ranking.destroy_all(["scraped_at <= ?", (Setting[:keeping_days] || 10).to_i.days.ago])
     {result: :success, games: games, updates: count, deleted: deleted.count}
   end
 
@@ -89,6 +90,24 @@ class Bot
     format_ranking(rs, "rookies")
   end
 
+  def settings
+    list = []
+    Setting.all.order(:name).each do |s|
+      list << "#{s.name}=#{s.value}"
+    end
+    list << "no settings" if list.empty?
+    list.join("\n")
+  end
+
+  def set(name, value)
+    begin
+      Setting[name] = value
+      "OK"
+    rescue => e
+      e.message
+    end
+  end
+
   private
   def find_rookies(game_id=nil)
     rookies = []
@@ -108,12 +127,13 @@ class Bot
     updates = []
     gs = Game.all.order(:id)
     gs = gs.where(id: game_id) if game_id
+    watching_days = (Setting[:watching_days] || 3).to_i.days
     gs.each do |g|
       newr = g.last_rankings.order(:rank)
       newr.each do |rn|
         g.rankings.where(name: rn.name).order(scraped_at: :desc).each do |ro|
           next if rn.id == ro.id
-          break if rn.scraped_at - ro.scraped_at > 3.days
+          break if rn.scraped_at - ro.scraped_at > watching_days
           ro.attributes = rn.attributes.except("id", "scraped_at", "created_at", "updated_at")
           next if ro.changes.except(:rank).empty?
           updates << {"name": rn.name, "rank": rn.rank}.merge(ro.changes)

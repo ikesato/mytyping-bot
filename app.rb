@@ -48,6 +48,13 @@ _*sync*_
   ランキング更新
 _*sync-updates*_
   ランキング更新と間近３日間の更新表示
+_*settings*_
+  設定一覧
+_*set <name>=<value>*_
+  設定変更
+  設定値
+  watching_days=<integer>
+  keeping_days=<integer>
 _*help*_
   show this help
 EOF
@@ -80,6 +87,10 @@ post '/out-going' do
     response = PP.pp(bot.sync, '')
     response += "\n"
     response += bot.updates
+  elsif text =~ /^\s*settings\s*$/
+    response = bot.settings
+  elsif text =~ /^\s*set\s*(.+)=(.+)$/
+    response = bot.set($1.strip, $2.strip)
   elsif text =~ /^\s*help\s*$/
     response = help
   elsif text =~ /^debug/

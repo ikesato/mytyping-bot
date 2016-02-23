@@ -55,18 +55,20 @@ describe Bot do
     end
 
     it "should find rookies" do
-      g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
-      Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00")))
-      bot = Bot.new
-      expect(bot.rookies).to match /no rookies/
+      Timecop.freeze(Date.parse('2016-02-22')) do
+        g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
+        Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00")))
+        bot = Bot.new
+        expect(bot.rookies).to match /no rookies/
 
-      rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"))
-      nr = rs.last.dup
-      nr[:rank] = 3
-      nr[:name] = "hoge"
-      rs << nr
-      Ranking.create!(rs)
-      expect(bot.rookies).to match /hoge/
+        rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"))
+        nr = rs.last.dup
+        nr[:rank] = 3
+        nr[:name] = "hoge"
+        rs << nr
+        Ranking.create!(rs)
+        expect(bot.rookies).to match /hoge/
+      end
     end
   end
 
@@ -106,27 +108,29 @@ describe Bot do
     end
 
     it "should find rookies" do
-      g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
-      Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00"), Date.parse("2016-02-20")))
+      Timecop.freeze(Date.parse('2016-02-22')) do
+        g = Game.create!(mytyping_id: 39661, name: "親指シフト練習１ー頻出語句ランキング")
+        Ranking.create!(default_rankings(g, Time.parse("2016-02-20 15:20:00"), Date.parse("2016-02-20")))
 
-      bot = Bot.new
-      expect(bot.updates).to match /no updates/
+        bot = Bot.new
+        expect(bot.updates).to match /no updates/
 
-      rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"), Date.parse("2016-02-20"))
-      # updates
-      mr = rs.last
-      mr[:score] = "12345"
-      mr[:date] = Date.parse("2016-02-21")
+        rs = default_rankings(g, Time.parse("2016-02-21 15:20:00"), Date.parse("2016-02-20"))
+        # updates
+        mr = rs.last
+        mr[:score] = "12345"
+        mr[:date] = Date.parse("2016-02-21")
 
-      # rookie
-      nr = rs.last.dup
-      nr[:rank] = 3
-      nr[:name] = "hoge"
-      rs << nr
-      Ranking.create!(rs)
-      updates = bot.updates
-      expect(updates).to match /^Rookie.*hoge.*$/
-      expect(updates).to match /^Update.*momoka.*score.*5808.*12345.*$/
+        # rookie
+        nr = rs.last.dup
+        nr[:rank] = 3
+        nr[:name] = "hoge"
+        rs << nr
+        Ranking.create!(rs)
+        updates = bot.updates
+        expect(updates).to match /^Rookie.*hoge.*$/
+        expect(updates).to match /^Update.*momoka.*score.*5808.*12345.*$/
+      end
     end
   end
 end

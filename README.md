@@ -17,6 +17,8 @@ myTyping をスクレイプして、ランキングが更新されたかを監�
 |updates            |間近３日間の更新表示    |
 |roukies            |間近３日間の新規ユーザー|
 |sync               |ランキング更新          |
+|settings           |全設定表示              |
+|set <name>=<value> |設定変更                |
 
 #### list
 

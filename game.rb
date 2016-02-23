@@ -1,5 +1,6 @@
 require 'active_record'
 require 'mytyping'
+require 'setting'
 
 class Game < ActiveRecord::Base
   has_many :rankings
@@ -24,7 +25,7 @@ class Game < ActiveRecord::Base
   end
 
   def past_rankings
-    t = rankings.where("scraped_at >= ?", 3.day.ago).minimum(:scraped_at)
+    t = rankings.where("scraped_at >= ?", (Setting[:watching_days] || 3).to_i.days.ago).minimum(:scraped_at)
     rankings.where(scraped_at: t)
   end
 end

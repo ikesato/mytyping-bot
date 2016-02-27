@@ -27,3 +27,6 @@ Slack チャットで以下 command を受け付けます。
 updates と rouikes と sync-updates でチェックする３日間の間隔は
 set watching_days=N で変更可能です。
 
+### Lisence
+
+MIT: http://rem.mit-license.org

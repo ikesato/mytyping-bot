@@ -92,7 +92,7 @@ post '/out-going' do
   elsif text =~ /^\s*set\s*(.+)=(.+)$/
     name = $1.strip
     value = $2.strip
-    if ["watching_days", "keeping_days"].includes?(name) == false
+    if ["watching_days", "keeping_days"].include?(name) == false
       response = "Invalid setting name [#{name}]"
     elsif value !~ /^\d+$/
       response = "Invalid setting value [#{value}]"

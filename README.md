@@ -1,11 +1,14 @@
 概要
 ====
 
-myTyping をスクレイプして、ランキングが更新されたかを監視します。
-あと、以下のチァットコマンドを解釈する bot を作ります。
+myTyping と言うタイピングサイトの監視ボットです。
+Slack にランキング更新結果を出力します。
+
 
 
 ### commands
+
+Slack チャットで以下 command を受け付けます。
 
 |command            |description             |
 |-------------------|------------------------|
@@ -17,29 +20,10 @@ myTyping をスクレイプして、ランキングが更新されたかを監�
 |updates            |間近３日間の更新表示    |
 |roukies            |間近３日間の新規ユーザー|
 |sync               |ランキング更新          |
+|sync-updates       |ランキング更新と表示    |
 |settings           |全設定表示              |
 |set <name>=<value> |設定変更                |
 
-#### list
+updates と rouikes と sync-updates でチェックする３日間の間隔は
+set watching_days=N で変更可能です。
 
-> list
-1  1234560  親指シフト練習１
-2  1234561  abcdefghiljklm２
-
-
-#### del <typing_id>
-
-> del 1
-deleted {id:1, mytyping_id:1234560, name:親指シフト練習１}
-OK
-
-#### add <myTyping ID>
-
-> add 1234562
-added {id:3, mytyping_id:1234562, name:親指シフト練習２}
-OK
-
-#### ranking [typing_id]
-
-> ranking 1
-rank  name  score

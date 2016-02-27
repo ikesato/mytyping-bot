@@ -90,7 +90,15 @@ post '/out-going' do
   elsif text =~ /^\s*settings\s*$/
     response = bot.settings
   elsif text =~ /^\s*set\s*(.+)=(.+)$/
-    response = bot.set($1.strip, $2.strip)
+    name = $1.strip
+    value = $2.strip
+    if ["watching_days", "keeping_days"].includes?(name) == false
+      response = "Invalid setting name [#{name}]"
+    elsif value !~ /^\d+$/
+      response = "Invalid setting value [#{value}]"
+    else
+      response = bot.set(name, value.to_i)
+    end
   elsif text =~ /^\s*help\s*$/
     response = help
   elsif text =~ /^debug/

@@ -76,12 +76,18 @@ post '/out-going' do
     game_id = $1.to_i if text =~ /ranking\s+(\d+)\s*$/
     response = bot.ranking(game_id)
   elsif text =~ /^\s*sync$/
-    response = bot.sync
-    response = PP.pp(response, '')
-    if text !~ /sync\s+only\s*$/
-      response += "\n"
-      response += bot.updates
+    only = true if text =~ /sync\s+only\s*$/
+    start_sync
+    EM::defer do
+      res = bot.sync
+      res = PP.pp(res, '')
+      unless only
+        res += "\n"
+        res += bot.updates
+      end
+      notifier.ping res
     end
+    response = "OK"
   elsif text =~ /^\s*rookies\s*$/
     response = bot.rookies
   elsif text =~ /^\s*updates\s*$/

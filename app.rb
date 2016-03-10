@@ -75,7 +75,7 @@ post '/out-going' do
   elsif text =~ /^\s*ranking/
     game_id = $1.to_i if text =~ /ranking\s+(\d+)\s*$/
     response = bot.ranking(game_id)
-  elsif text =~ /^\s*sync$/
+  elsif text =~ /^\s*sync/
     only = true if text =~ /sync\s+only\s*$/
     EM::defer do
       res = bot.sync

@@ -44,10 +44,9 @@ _*updates*_
   間近３日間の更新表示
 _*roukies*_
   間近３日間の新規ユーザー
-_*sync*_
-  ランキング更新
-_*sync-updates*_
-  ランキング更新と間近３日間の更新表示
+_*sync [only]*_
+  ランキング更新と間近３日間の更新表示  
+  only をつけると更新のみ
 _*settings*_
   設定一覧
 _*set <name>=<value>*_
@@ -76,17 +75,17 @@ post '/out-going' do
   elsif text =~ /^\s*ranking/
     game_id = $1.to_i if text =~ /ranking\s+(\d+)\s*$/
     response = bot.ranking(game_id)
-  elsif text =~ /^\s*sync\s*$/
+  elsif text =~ /^\s*sync$/
     response = bot.sync
     response = PP.pp(response, '')
+    if text !~ /sync\s+only\s*$/
+      response += "\n"
+      response += bot.updates
+    end
   elsif text =~ /^\s*rookies\s*$/
     response = bot.rookies
   elsif text =~ /^\s*updates\s*$/
     response = bot.updates
-  elsif text =~ /^\s*sync-updates\s*$/
-    response = PP.pp(bot.sync, '')
-    response += "\n"
-    response += bot.updates
   elsif text =~ /^\s*settings\s*$/
     response = bot.settings
   elsif text =~ /^\s*set\s*(.+)=(.+)$/

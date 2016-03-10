@@ -19,8 +19,7 @@ Slack チャットで以下 command を受け付けます。
 |ranking _[typing_id]_ |ランキング表示          |
 |updates               |間近３日間の更新表示    |
 |roukies               |間近３日間の新規ユーザー|
-|sync                  |ランキング更新          |
-|sync-updates          |ランキング更新と表示    |
+|sync [only]           |ランキング更新と更新表示。only をつけると更新のみで更新表示はしない。|
 |settings              |全設定表示              |
 |set _name_ = _value_  |設定変更                |
 

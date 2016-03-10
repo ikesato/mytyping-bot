@@ -77,7 +77,6 @@ post '/out-going' do
     response = bot.ranking(game_id)
   elsif text =~ /^\s*sync$/
     only = true if text =~ /sync\s+only\s*$/
-    start_sync
     EM::defer do
       res = bot.sync
       res = PP.pp(res, '')
